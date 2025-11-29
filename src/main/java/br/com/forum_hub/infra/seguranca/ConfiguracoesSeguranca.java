@@ -31,6 +31,7 @@ public class ConfiguracoesSeguranca {
                 .authorizeHttpRequests(
                         req -> {
                             req.requestMatchers("/login", "/atualizar-token", "/registrar", "/verificar-conta").permitAll();
+                            req.requestMatchers("/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll();
 
                             req.requestMatchers(HttpMethod.GET, "/cursos").permitAll();
                             req.requestMatchers(HttpMethod.GET, "/topicos/**").permitAll();

@@ -12,6 +12,7 @@ public class HierarquiaService {
     private final RoleHierarchy roleHierarchy;
 
     public HierarquiaService(RoleHierarchy roleHierarchy) {
+
         this.roleHierarchy = roleHierarchy;
     }
 
