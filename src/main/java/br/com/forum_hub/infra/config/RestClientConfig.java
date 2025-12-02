@@ -8,7 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
 @Configuration
-@EnableConfigurationProperties(GitHubProperties.class)
+@EnableConfigurationProperties({
+        GitHubProperties.class,
+        GoogleProperties.class
+})
 public class RestClientConfig {
 
     @Bean
@@ -20,6 +23,14 @@ public class RestClientConfig {
     public RestClient githubRestClient(RestClient.Builder builder, GitHubProperties gitHubProperties) {
         return builder
                 .baseUrl(gitHubProperties.apiBaseUrl())
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+    }
+
+    @Bean
+    public RestClient googleRestClient(RestClient.Builder builder, GoogleProperties googleProperties) {
+        return builder
+                .baseUrl(googleProperties.apiBaseUrl())
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }

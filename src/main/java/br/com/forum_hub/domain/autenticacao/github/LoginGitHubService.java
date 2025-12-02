@@ -36,7 +36,7 @@ public class LoginGitHubService {
                         "client_secret",props.clientSecret(),
                         "redirect_uri",props.redirectUri()))
                 .retrieve()
-                .body(String.class);
+                .body(Map.class).get("access_token").toString();
 
     }
 }
