@@ -42,7 +42,7 @@ public class LoginGitHubController {
     @GetMapping("/autorizado")
     public ResponseEntity<String> autorizado(@RequestParam String code) {
 
-    return ResponseEntity.ok().body(loginGitHubService.obterToken(code));
+    return ResponseEntity.ok().body(loginGitHubService.obterEmail(code));
     };
 
 }
