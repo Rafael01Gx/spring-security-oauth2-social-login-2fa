@@ -1,5 +1,6 @@
 package br.com.forum_hub.controller;
 
+import br.com.forum_hub.domain.autenticacao.DadosToken;
 import br.com.forum_hub.domain.autenticacao.github.LoginGitHubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,10 @@ public class LoginGitHubController {
 
     private final LoginGitHubService loginGitHubService;
 
+
     public LoginGitHubController(LoginGitHubService loginGitHubService) {
         this.loginGitHubService = loginGitHubService;
+
     }
 
 //    @GetMapping
@@ -40,9 +43,9 @@ public class LoginGitHubController {
     }
 
     @GetMapping("/autorizado")
-    public ResponseEntity<String> autorizado(@RequestParam String code) {
+    public ResponseEntity<DadosToken> autenticarUsuarioOAuth(@RequestParam String code) {
 
-    return ResponseEntity.ok().body(loginGitHubService.obterEmail(code));
+    return ResponseEntity.ok().body(loginGitHubService.autenticar(code));
     };
 
 }
