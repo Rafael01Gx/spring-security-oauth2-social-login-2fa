@@ -8,6 +8,7 @@ public record GitHubProperties(
         String baseUrl,
         String clientId,
         String clientSecret,
-        String redirectUri
+        String redirectUri,
+        String redirectUriRegistro
 ) {
 }

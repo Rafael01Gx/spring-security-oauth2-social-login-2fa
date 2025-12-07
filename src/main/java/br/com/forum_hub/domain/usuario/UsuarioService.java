@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UsuarioService implements UserDetailsService {
 
@@ -42,7 +44,7 @@ public class UsuarioService implements UserDetailsService {
         var senhaCriptografada = passwordEncoder.encode(dados.senha());
 
         var perfil = perfilRepository.findByNome(PerfilNome.ESTUDANTE);
-        var usuario = new Usuario(dados, senhaCriptografada, perfil);
+        var usuario = new Usuario(dados, senhaCriptografada, perfil,false);
 
         emailService.enviarEmailVerificacao(usuario);
         return usuarioRepository.save(usuario);
@@ -100,5 +102,31 @@ public class UsuarioService implements UserDetailsService {
     public void reativarUsuario(Long id) {
         var usuario = usuarioRepository.findById(id).orElseThrow();
         usuario.reativar();
+    }
+
+    public Optional<Usuario> findByEmailIgnoreCaseAndVerificadoTrue(String email) {
+        return usuarioRepository.findByEmailIgnoreCaseAndVerificadoTrue(email);
+    }
+
+    @Transactional
+
+    public Usuario cadastrarVerificado(DadosCadastroUsuario dados) {
+
+        var usuario = criarUsuario(dados, true);
+
+        return usuarioRepository.save(usuario);
+
+    }
+
+
+
+    private Usuario criarUsuario(DadosCadastroUsuario dados, Boolean verificado) {
+
+        var senhaCriptografada = passwordEncoder.encode(dados.senha());
+
+        var perfil = perfilRepository.findByNome(PerfilNome.ESTUDANTE);
+
+        return new Usuario(dados, senhaCriptografada, perfil, verificado);
+
     }
 }

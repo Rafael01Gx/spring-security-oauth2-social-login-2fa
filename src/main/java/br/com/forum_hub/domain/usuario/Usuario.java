@@ -1,4 +1,5 @@
 package br.com.forum_hub.domain.usuario;
+
 import br.com.forum_hub.domain.perfil.Perfil;
 import br.com.forum_hub.infra.exception.RegraDeNegocioException;
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="usuarios")
+@Table(name = "usuarios")
 public class Usuario implements UserDetails {
 
     @Id
@@ -38,25 +39,46 @@ public class Usuario implements UserDetails {
     private Boolean ativo;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "usuarios_perfis",
-                joinColumns = @JoinColumn(name = "usuario_id"),
-                inverseJoinColumns = @JoinColumn(name = "perfil_id"))
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "perfil_id"))
     private List<Perfil> perfis = new ArrayList<>();
 
     @Deprecated
-    public Usuario(){}
+    public Usuario() {
+    }
 
-    public Usuario(DadosCadastroUsuario dados, String senhaCriptografada, Perfil perfil) {
+    public Usuario(DadosCadastroUsuario dados, String senhaCriptografada, Perfil perfil, Boolean verificado) {
+
         this.nomeCompleto = dados.nomeCompleto();
+
         this.email = dados.email();
+
         this.senha = senhaCriptografada;
+
         this.nomeUsuario = dados.nomeUsuario();
+
         this.biografia = dados.biografia();
+
         this.miniBiografia = dados.miniBiografia();
-        this.verificado = false;
-        this.token = UUID.randomUUID().toString();
-        this.expiracaoToken = LocalDateTime.now().plusMinutes(30);
-        this.ativo = false;
+
+        if (verificado) {
+
+            aprovarUsuario();
+
+        } else {
+
+            this.verificado = false;
+
+            this.token = UUID.randomUUID().toString();
+
+            this.expiracaoToken = LocalDateTime.now().plusMinutes(30);
+
+            this.ativo = false;
+
+        }
+
         this.perfis.add(perfil);
+
     }
 
     @Override
@@ -99,13 +121,28 @@ public class Usuario implements UserDetails {
     }
 
     public void verificar() {
-        if(expiracaoToken.isBefore(LocalDateTime.now())){
+
+        if (expiracaoToken.isBefore(LocalDateTime.now())) {
+
             throw new RegraDeNegocioException("Link de verificação expirou!");
+
         }
+
+        aprovarUsuario();
+
+    }
+
+
+    private void aprovarUsuario() {
+
         this.verificado = true;
+
         this.ativo = true;
+
         this.token = null;
+
         this.expiracaoToken = null;
+
     }
 
     public void desativar() {
@@ -113,13 +150,13 @@ public class Usuario implements UserDetails {
     }
 
     public Usuario alterarDados(DadosEdicaoUsuario dados) {
-        if(dados.nomeUsuario() != null){
+        if (dados.nomeUsuario() != null) {
             this.nomeUsuario = dados.nomeUsuario();
         }
-        if(dados.miniBiografia() != null){
+        if (dados.miniBiografia() != null) {
             this.miniBiografia = dados.miniBiografia();
         }
-        if(dados.biografia() != null){
+        if (dados.biografia() != null) {
             this.biografia = dados.biografia();
         }
         return this;

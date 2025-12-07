@@ -2,6 +2,7 @@ package br.com.forum_hub.controller;
 
 import br.com.forum_hub.domain.autenticacao.DadosToken;
 import br.com.forum_hub.domain.autenticacao.github.LoginGitHubService;
+import br.com.forum_hub.domain.usuario.DadosCadastroUsuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,6 @@ public class LoginGitHubController {
 //    }
 
 
-
     @GetMapping
     public ResponseEntity<Void> redirecionarGitHub() {
         return ResponseEntity
@@ -45,7 +45,26 @@ public class LoginGitHubController {
     @GetMapping("/autorizado")
     public ResponseEntity<DadosToken> autenticarUsuarioOAuth(@RequestParam String code) {
 
-    return ResponseEntity.ok().body(loginGitHubService.autenticar(code));
-    };
+        return ResponseEntity.ok().body(loginGitHubService.autenticar(code));
+    }
+
+    ;
+
+
+    @GetMapping("/registro")
+
+    public ResponseEntity<Void> redirecionarRegistroGithub() {
+
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(loginGitHubService.gerarUrlRegistro())).build();
+
+    }
+
+
+    @GetMapping("/registro-autorizado")
+
+    public ResponseEntity<DadosToken> registrarOAuth(@RequestParam String code) {
+
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:8080/")).body(loginGitHubService.registrarUsuario(code));
+    }
 
 }
