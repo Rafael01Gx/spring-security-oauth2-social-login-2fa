@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,12 +35,12 @@ public class LoginGitHubService {
         this.tokenService = tokenService;
     }
 
-    public String gerarUrl() {
+    public URI gerarUrl() {
 
-        return "https://github.com/login/oauth/authorize" +
+        return URI.create("https://github.com/login/oauth/authorize" +
                 "?client_id=" + props.clientId() +
                 "&redirect_uri=" + props.redirectUri() +
-                "&scope=user:email,public_repo";
+                "&scope=user:email,public_repo");
     }
 
     public String gerarUrlRegistro() {

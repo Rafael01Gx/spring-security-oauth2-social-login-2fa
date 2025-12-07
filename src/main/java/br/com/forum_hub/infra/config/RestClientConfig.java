@@ -2,6 +2,8 @@ package br.com.forum_hub.infra.config;
 
 import br.com.forum_hub.infra.client.GitHubAuthClient;
 import br.com.forum_hub.infra.client.GitHubUserClient;
+import br.com.forum_hub.infra.client.GoogleAuthClient;
+import br.com.forum_hub.infra.client.GoogleUserClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -50,6 +52,19 @@ public class RestClientConfig {
     }
 
     @Bean
+    public RestClient googleUserRestClient(RestClient.Builder builder, GoogleProperties googleProperties) {
+        return builder
+                .baseUrl(googleProperties.userInfoUri())
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+    }
+
+    @Bean
+    public RestClientAdapter googleAuthAdapter(RestClient googleRestClient) {
+        return RestClientAdapter.create(googleRestClient);
+    }
+
+    @Bean
     RestClientAdapter gitHubAuthAdapter(RestClient gitHubAuthRestClient) {
         return RestClientAdapter.create(gitHubAuthRestClient);
     }
@@ -75,5 +90,24 @@ public class RestClientConfig {
                 .createClient(GitHubUserClient.class);
     }
 
+    @Bean
+    public GoogleAuthClient googleAuthClient(RestClientAdapter googleAuthAdapter) {
+        return HttpServiceProxyFactory
+                .builderFor(googleAuthAdapter)
+                .build()
+                .createClient(GoogleAuthClient.class);
+    }
 
+    @Bean
+    public RestClientAdapter googleUserAdapter(RestClient googleUserRestClient) {
+        return RestClientAdapter.create(googleUserRestClient);
+    }
+
+    @Bean
+    public GoogleUserClient googleUserClient(RestClientAdapter googleUserAdapter) {
+        return HttpServiceProxyFactory
+                .builderFor(googleUserAdapter)
+                .build()
+                .createClient(GoogleUserClient.class);
+    }
 }

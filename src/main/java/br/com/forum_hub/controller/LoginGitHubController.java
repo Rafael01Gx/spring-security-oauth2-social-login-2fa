@@ -2,7 +2,6 @@ package br.com.forum_hub.controller;
 
 import br.com.forum_hub.domain.autenticacao.DadosToken;
 import br.com.forum_hub.domain.autenticacao.github.LoginGitHubService;
-import br.com.forum_hub.domain.usuario.DadosCadastroUsuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +37,7 @@ public class LoginGitHubController {
     public ResponseEntity<Void> redirecionarGitHub() {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
-                .location(URI.create(loginGitHubService.gerarUrl()))
+                .location(loginGitHubService.gerarUrl())
                 .build();
     }
 
