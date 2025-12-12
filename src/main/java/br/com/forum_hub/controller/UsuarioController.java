@@ -78,4 +78,9 @@ public class UsuarioController {
         var usuario = usuarioService.adicionarPerfil(id, dados);
         return ResponseEntity.ok(new DadosListagemUsuario(usuario));
     }
+
+    @PatchMapping("configurar-a2f")
+    public ResponseEntity<String> gerarQrCode(@AuthenticationPrincipal Usuario logado){
+        return ResponseEntity.ok().body(usuarioService.gerarQrCode(logado));
+    }
 }

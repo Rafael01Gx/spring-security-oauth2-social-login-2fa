@@ -31,7 +31,7 @@ public class LoginGoogleController {
     }
 
     @GetMapping("/registro-autorizado")
-    public ResponseEntity<Object> registroUsuarioGoogle(@RequestParam String code){
+    public ResponseEntity<DadosToken> registroUsuarioGoogle(@RequestParam String code){
         return ResponseEntity.ok().body(loginGoogleService.registrar(code));
     }
 

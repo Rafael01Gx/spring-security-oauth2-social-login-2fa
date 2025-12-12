@@ -63,6 +63,8 @@ public class Usuario implements UserDetails {
 
         this.miniBiografia = dados.miniBiografia();
 
+        this.a2fAtiva = false;
+
         if (verificado) {
 
             aprovarUsuario();
@@ -76,6 +78,7 @@ public class Usuario implements UserDetails {
             this.expiracaoToken = LocalDateTime.now().plusMinutes(30);
 
             this.ativo = false;
+
 
         }
 
@@ -176,4 +179,11 @@ public class Usuario implements UserDetails {
         this.ativo = true;
     }
 
+    public void gerarSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public String getSecret() {
+        return this.secret;
+    }
 }

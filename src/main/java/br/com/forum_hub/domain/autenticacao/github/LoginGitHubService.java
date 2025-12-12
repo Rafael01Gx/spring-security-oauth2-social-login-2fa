@@ -9,6 +9,7 @@ import br.com.forum_hub.domain.usuario.UsuarioService;
 import br.com.forum_hub.infra.client.GitHubAuthClient;
 import br.com.forum_hub.infra.client.GitHubUserClient;
 import br.com.forum_hub.infra.config.GitHubProperties;
+import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -83,7 +84,7 @@ public class LoginGitHubService {
         return response.get("access_token").toString();
     }
 
-
+    @Transactional
     public DadosToken registrarUsuario(String code) {
         var token = obterToken(code, props.redirectUriRegistro());
         DadosGitHubUser dados = userClient.buscarDadosUsuario("Bearer " + token);

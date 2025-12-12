@@ -2,6 +2,7 @@ package br.com.forum_hub.domain.autenticacao.google;
 
 import br.com.forum_hub.domain.autenticacao.DadosToken;
 import br.com.forum_hub.domain.autenticacao.TokenService;
+import br.com.forum_hub.domain.usuario.DadosCadastroUsuario;
 import br.com.forum_hub.domain.usuario.Usuario;
 import br.com.forum_hub.domain.usuario.UsuarioService;
 import br.com.forum_hub.infra.client.GoogleAuthClient;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class LoginGoogleService {
@@ -65,11 +67,14 @@ public class LoginGoogleService {
         return dadosToken(usuario);
     }
 
-    public Map<String,Object> registrar(String code) {
+    public DadosToken registrar(String code) {
         var tokens = obterToken(code, props.redirectUriRegistro(),"authorization_code");
         var token = tokens.get("access_token").toString();
-        //Implementar a logica de registro ...
-        return userClient.informacoesUsuario("Bearer" + token);
+        var userInfo= userClient.informacoesUsuario("Bearer" + token);
+
+        var senha = UUID.randomUUID().toString();
+        Usuario user =  usuarioService.cadastrarVerificado(new DadosCadastroUsuario(userInfo.email(),senha, userInfo.name(), userInfo.email(),null,null));
+        return dadosToken(user);
     }
 
     private Map<String,Object> obterToken(String code, String redirect_uri, String grant_type) {
