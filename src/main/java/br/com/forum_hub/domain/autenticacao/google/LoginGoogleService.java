@@ -68,7 +68,7 @@ public class LoginGoogleService {
     public Map<String,Object> registrar(String code) {
         var tokens = obterToken(code, props.redirectUriRegistro(),"authorization_code");
         var token = tokens.get("access_token").toString();
-    //Implementar a logica de registro ...
+        //Implementar a logica de registro ...
         return userClient.informacoesUsuario("Bearer" + token);
     }
 

@@ -110,12 +110,4 @@ public class RestClientConfig {
                 .build()
                 .createClient(GoogleUserClient.class);
     }
-
-    @Bean
-    public RestClient googleRestClient(RestClient.Builder builder, GoogleProperties googleProperties) {
-        return builder
-                .baseUrl(googleProperties.apiBaseUrl())
-                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-    }
 }
