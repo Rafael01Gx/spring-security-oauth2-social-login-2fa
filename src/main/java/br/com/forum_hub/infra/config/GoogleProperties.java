@@ -7,8 +7,6 @@ public record GoogleProperties(
         String apiBaseUrl,
         String clientId,
         String clientSecret,
-        String redirectUri,
-        String redirectUriRegistro,
-        String userInfoUri
+        String redirectUri
 ) {
 }
