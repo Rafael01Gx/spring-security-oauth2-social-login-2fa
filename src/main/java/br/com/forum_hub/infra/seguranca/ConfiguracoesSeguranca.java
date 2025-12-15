@@ -68,9 +68,17 @@ public class ConfiguracoesSeguranca {
 
     @Bean
     public RoleHierarchy hierarquiaPerfis(){
-        String hierarquia = "ROLE_ADMIN > ROLE_MODERADOR\n"+
-                "ROLE_MODERADOR > ROLE_INSTRUTOR\n"+
-                "ROLE_MODERADOR > ROLE_ESTUDANTE";
-        return RoleHierarchyImpl.fromHierarchy(hierarquia);
+        return RoleHierarchyImpl.withDefaultRolePrefix()
+                .role("ADMIN").implies("MODERADOR")
+                .role("MODERADOR").implies("ESTUDANTE", "INSTRUTOR")
+                .build();
     }
+
+//    @Bean
+//    public RoleHierarchy hierarquiaPerfis(){
+//        return RoleHierarchyImpl.withRolePrefix("PERFIL_")
+//                .role("ADMIN").implies("MODERADOR")
+//                .role("MODERADOR").implies("ESTUDANTE", "INSTRUTOR")
+//                .build();
+//    }
 }
