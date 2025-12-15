@@ -53,14 +53,12 @@ public class LoginGoogleService {
 
     public DadosToken autenticar(String code) {
         var tokens = obterToken(code, props.redirectUri(),"authorization_code");
-        var idToken = tokens.get("id_token").toString();
-        var refreshToken = tokens.get("refresh_token").toString();
-        var email = extractEmailByIdToken(idToken);
 
-        if (refreshToken != null) {
-            // Armazene o refresh token de forma segura no banco de dados
-            System.out.println("Refresh Token: " + refreshToken);
-        }
+        IO.println(tokens);
+
+        var idToken = tokens.get("id_token").toString();
+
+        var email = extractEmailByIdToken(idToken);
 
         Usuario usuario = usuarioService.findByEmailIgnoreCaseAndVerificadoTrue(email).orElseThrow();
 
