@@ -101,7 +101,7 @@ public class LoginGitHubService {
         String tokenAcesso = tokenService.gerarToken((Usuario) authentication.getPrincipal());
         String refreshToken = tokenService.gerarRefreshToken((Usuario) authentication.getPrincipal());
 
-        return new DadosToken(tokenAcesso, refreshToken);
+        return new DadosToken(tokenAcesso, refreshToken,false);
     }
 
 
